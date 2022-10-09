@@ -30,8 +30,9 @@
  * 1. Can only be called inside components 
  * 2. Can't be called inside loops, conditionals, or nested functions
  * 3. Must be called in every render and in the same order
- * 
  */
+
+import { useState } from "react";
 
 const Counter = () => {
     let count = 0;

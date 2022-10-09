@@ -53,8 +53,8 @@ const MessageContainer = () => {
 /**
  * Exercise 1:
  * 
- * - Implement the Button component so that it receives
- *   the message it should pass to the parent, without
+ * - Implement the Button component so that it 
+ *   passes the message to the parent, without
  *   modifying button list.
  */
 

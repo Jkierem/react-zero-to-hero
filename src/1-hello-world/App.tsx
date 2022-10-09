@@ -36,13 +36,20 @@ const MyFirstComponent = (props: Props) => {
     return <p>I received the following props: {JSON.stringify(props)}</p>
 }
 
+const moreProps = {
+    a: 42,
+    b: 43,
+}
+
 const withSomeProps = <MyFirstComponent 
     numberProp={40 + 2} 
+    templateString={`this is a template string`}
     stringProp="this is a string" 
     trueProp // Same as "trueProp={true}"
     booleanProp={false}
     arrayProp={[1,2,3]}
     objectProp={{ a: 42, b: 40 }}
+    {...moreProps}
 />
 
 /**
