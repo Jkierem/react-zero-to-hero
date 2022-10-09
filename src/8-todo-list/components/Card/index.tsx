@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled, { StyledComponent } from "styled-components"
 import { boxShadow, foldProp, propWithDefault } from "../../utils/styled-components"
 
 interface CardProps {
@@ -21,7 +21,7 @@ const CardComp = styled.div<CardProps>`
             if( typeof $elevated === "number" ){
                 return boxShadow($elevated)
             }
-            return boxShadow(2)
+            return boxShadow(1)
         }
     )};
 `
@@ -34,7 +34,9 @@ const ContentComp = styled.div`
 
 ContentComp.displayName = "Card.Content"
 
-const Card = CardComp as typeof CardComp & { Content: typeof ContentComp }
+type StyledDiv<P extends object = {}> = StyledComponent<"div", any, P, never>
+
+const Card = CardComp as StyledDiv<CardProps> & { Content: StyledDiv }
 Card.Content = ContentComp;
 
 export default Card
