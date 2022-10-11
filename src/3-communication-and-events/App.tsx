@@ -64,7 +64,14 @@ interface ButtonProps {
     onClick: (msg: string) => void
 }
 
-const Button = (props: ButtonProps) => <>{/* Finish Implementation */}</>
+const Button = (props: ButtonProps) => {
+    const { label, message, onClick } = props
+    const handleClick = () => onClick(message)
+
+    return <button onClick={handleClick}>
+        {label}
+    </button>
+}
 
 const ButtonList = () => {
     const data = [

@@ -9,6 +9,7 @@
  */
 
 import { useEffect, useState } from "react"
+import styled, { keyframes } from "styled-components"
 
 const AlertIfOdd = ({ n }: { n: number }) => {
     useEffect(() => {
@@ -61,7 +62,6 @@ const AlertOnMountUnmount = () => {
  *       `useEffect` hooks to handle the request.
  */
 
- import styled, { keyframes } from "styled-components"
 
  const rotationAnimation = keyframes`
      0% {
@@ -75,7 +75,7 @@ const AlertOnMountUnmount = () => {
  const Loader = styled.div`
      width: 48px;
      height: 48px;
-     border: 5px solid #FFF;
+     border: 5px solid #000;
      border-bottom-color: transparent;
      border-radius: 50%;
      display: inline-block;
@@ -83,8 +83,8 @@ const AlertOnMountUnmount = () => {
      animation: ${rotationAnimation} 1s linear infinite;
  `
 
+type UserData = { name: string }
 const getData = (result: "success" | "failure", milliseconds = 1000) => {
-    type UserData = { name: string }
 
     const data: UserData = {
         name: "Tom Mock"
@@ -97,10 +97,41 @@ const getData = (result: "success" | "failure", milliseconds = 1000) => {
     })
 }
 
+type States = "loading" | "success" | "failure"
+
 const UserGreeting = () => {
-    return <></>
+    const [state, setState] = useState<States>("loading")
+    const [value, setValue] = useState<UserData | undefined>()
+    const [error, setError] = useState<Error | undefined>()
+
+    useEffect(() => {
+        let mounted = true;
+        getData("failure", 5000)
+        .then((x) => {
+            if( mounted) {
+                setState("success")
+                setValue(x)
+            }
+        })
+        .catch((err) => {
+            if( mounted ){
+                setState("failure")
+                setError(err)
+            }
+        })
+
+        return () => {mounted = false}
+    },[])
+
+    if(state === "loading"){
+        return <Loader />
+    }
+
+    return state === "failure" 
+        ? <div>Lo siento. Error {error?.message}</div> 
+        : <div>Hola {value?.name}</div>
 }
 
-const App = () => <></>
+const App = () => <UserGreeting />
 
 export default App

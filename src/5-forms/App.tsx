@@ -10,6 +10,8 @@
  * - Use the useReducer hook to implement the Form component
  */
 
+import { useState } from "react"
+
 type InputType = "button" 
     | "checkbox" | "color" | "date" | "datetime-local" | "email"
     | "file" | "hidden" | "image" | "month" | "number" | "password"
@@ -30,18 +32,29 @@ const Input = ({ name, onChange, type="text" }: InputProps) => {
     return <input type={type} name={name} onChange={handleChange} />
 }
 
-const Submit = () => <input type="submit">Submit</input>
+const Submit = () => <input type="submit" />
 
 interface FormProps {
     onSubmit: (formValues: any) => void
 }
 
 const Form = (props: React.PropsWithChildren<FormProps>) => {
-    /* Implement here */
+    const [data, setData] = useState({ name: "", password: "" })
+
+    const handleInput = (value: string, field: string) => {
+        setData(data => ({...data, [field]: value }))
+    }
+
+    return <form onSubmit={(e) => {
+        e.preventDefault()
+        props.onSubmit(data)
+    }}>
+        <Input name="name" onChange={handleInput}/>
+        <Input name="password" onChange={handleInput} type="password"/>
+        <Submit />
+    </form>
 }
 
-// Remove this when Form is finished
-// @ts-ignore
 const App = () => <Form onSubmit={console.log}/>
 
 export default App

@@ -28,7 +28,7 @@
 
 const ChildrenLogger = ({ children }: React.PropsWithChildren<{}>) => {
     console.log(children)
-    return children
+    return <>{children}</>
 }
 
 /**
@@ -53,7 +53,7 @@ const participants = [
 
 const List = () => {
     return <ul>
-        {/* fill in */}
+        {participants.map(({ name, score }) => <li key={name}>{name} - {score}</li>)}
     </ul>
 }
 

@@ -64,7 +64,7 @@ interface HelloWorldProps {
     who: string
 }
 
-const HelloWorld = ({ who }: HelloWorldProps) => <></>
+const HelloWorld = ({ who }: HelloWorldProps) => <div>Hello {who}</div>
 
 /**
  * Excercise 2:
@@ -77,6 +77,9 @@ const HelloWorld = ({ who }: HelloWorldProps) => <></>
  *         element
  */
 
-const App = () => <HelloWorld who="World!"/>
+const App = () => <>
+    <HelloWorld who="World!"/>
+    <HelloWorld who="Universe!"/>
+</>
 
 export default App;

@@ -40,21 +40,47 @@ interface SyncStore<T> {
     subscribe(sub: Subscriber<T>): Unsubscribe
 }
 
+interface Entry<T> {
+    readonly id: number
+    sub: Subscriber<T>
+}
 class Store implements SyncStore<GlobalState> {
+    private counter: number
+    private subs: Entry<GlobalState>[]
     private state: GlobalState
 
     constructor(){
         this.state = { name: "", count: "0" }
+        this.subs = []
+        this.counter = 0
     }
 
     getSnapshot(): GlobalState {
-        /* Implement here */
-        throw new Error("Method not implemented.")
+        return this.state
     }
 
     subscribe(sub: (state: GlobalState) => void): Unsubscribe {
-        /* Implement here */
-        throw new Error("Method not implemented.")
+        const newId = this.counter + 1
+        this.counter++;
+        const newEntry: Entry<GlobalState> = {
+            id: newId,
+            sub,
+        }
+
+        this.subs.push(newEntry)
+
+        return () => {
+            this.subs = this.subs.filter(x => x.id !== newId)
+        }
+    }
+
+    setState(next: GlobalState | ((prev: GlobalState) => GlobalState)){
+        if( next instanceof Function ){
+            this.state = next(this.state)
+        } else {
+            this.state = next
+        }
+        this.subs.forEach((entry) => entry.sub(this.state))
     }
 }
 
@@ -65,7 +91,9 @@ const useGlobalState = (): [GlobalState, SetGlobalState] => {
         () => store.getSnapshot()
     )
 
-    const setState = (n: GlobalState) => { /* Implement here*/ }
+    const setState = (n: GlobalState | ((prev: GlobalState) => GlobalState)) => { 
+        store.setState(n)
+    }
 
     return [value, setState]
 }
